@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Ghost Comment</title>
+</head>
+<body>
+    <div class="table">
+        <div class="phone">
+            <div class="main-screen">
+                <img src="./images/tiktok-sing.gif" alt="">
+                <div class="notch"></div>
+                <div class="foryou">
+                    <div class="live"><img src="./images/live-removebg-preview.png" alt=""></div>
+                    <div class="fyp">Following | For You</div>
+                    <div class="search"><img src="./images/search-removebg-preview.png" alt=""></div>
+                </div>
+                <div class="side-menu" id="side-menu"><img src="./images/side-menu-removebg-preview.png" alt="" onclick="showComments()"></div>
+                <div class="activity-bar">
+    
+                </div>
+                <div class="menu">
+                    <img src="./images/menu.jpg" alt="">
+                </div>
+                <div class="comment-section" id="comment-section">
+                    <div class="header"><h5>comments</h5></div>
+                    <div class="comments" id="comments"></div>
+                    <div class="comment-input">
+                        <input id="com" type="text" name="name" value="" placeholder="Add comment...">
+                        <button type="Submit" style="display: none;"></button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="phone2">
+            <div class="main-screen">
+                <img src="./images/tiktok-sing.gif" alt="">
+                <div class="notch"></div>
+                <div class="foryou">
+                    <div class="live"><img src="./images/live-removebg-preview.png" alt=""></div>
+                    <div class="fyp">Following | For You</div>
+                    <div class="search"><img src="./images/search-removebg-preview.png" alt=""></div>
+                </div>
+                <div class="side-menu" id="side-menu"><img src="./images/side-menu-removebg-preview.png" alt="" onclick="showCommentsP2()"></div>
+                <div class="activity-bar">
+    
+                </div>
+                <div class="menu">
+                    <img src="./images/menu.jpg" alt="">
+                </div>
+                <div class="comment-section" id="comment-section2">
+                    <div class="header"><h5>comments</h5></div>
+                    <div class="comments" id="comments2"></div>
+                    <div class="comment-input">
+                        <input id="com" type="text" name="name" value="" placeholder="Add comment...">
+                        <button type="Submit" style="display: none;"></button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+
+        const com = document.getElementById("com");
+
+        showComments = () => {
+            document.getElementById("comment-section").style.display = "block";
+        }
+
+        showCommentsP2 = () => {
+            document.getElementById("comment-section2").style.display = "block";
+        }
+
+        com.addEventListener("keypress", submitOnEnter);
+
+        submitOnEnter = (event) => {
+            if(event.which === 13){
+                document.getElementById("comments").style.display = "block";
+                document.getElementById("comments2").style.display = "block";
+                var comment = com.value;
+
+                sendRequest(comment);
+
+                const wrapper = document.getElementById("comments");
+                const comment_username = document.createElement("div");
+                const comment_child = document.createElement("div");
+                
+                comment_username.innerHTML = "code.hypexd";
+                comment_username.className = "username";
+                comment_child.innerHTML = comment;
+                comment_child.className = "comment";
+
+                document.getElementById("com").value = '';
+
+                wrapper.appendChild(comment_username);
+                wrapper.appendChild(comment_child);    
+            }
+        }
+
+        sendRequest = async (comment) => {
+            await fetch('http://127.0.0.1:5000/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        "Access-Control-Allow-Origin":"*",
+                    },
+                    body: JSON.stringify({ "message": comment })
+                })
+                .then(response => response.json())
+                .then(response => {
+                    console.log(JSON.stringify(response))
+                    if (response.response === "Positive") {
+                        const wrapper2 = document.getElementById("comments2");
+                        const comment_username2 = document.createElement("div");
+                        const comment_child2 = document.createElement("div");
+
+                        comment_username2.innerHTML = "code.hypexd";
+                        comment_username2.className = "username";
+                        comment_child2.innerHTML = comment;
+                        comment_child2.className = "comment";
+
+                        wrapper2.appendChild(comment_username2);
+                        wrapper2.appendChild(comment_child2);
+                    }
+                });
+            
+             /**   const config = {
+                    method:'POST',
+                    url:'http://127.0.0.1:5000/',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        "Access-Control-Allow-Origin":"*",
+                    },
+                    data:{ "message": comment }
+                }
+
+                const result = await axios.request(config).catch(err=>{
+                    console.error(err)
+                })
+
+                const data = result.data
+                if(data.response==="Positive"){
+                    const wrapper2 = document.getElementById("comments2");
+                        const comment_username2 = document.createElement("div");
+                        const comment_child2 = document.createElement("div");
+
+                        comment_username2.innerHTML = "code.hypexd";
+                        comment_username2.className = "username";
+                        comment_child2.innerHTML = comment;
+                        comment_child2.className = "comment";
+
+                        wrapper2.appendChild(comment_username2);
+                        wrapper2.appendChild(comment_child2);
+                    }
+                } **/
+        }
+
+    </script>
+    
+</body>
+</html>
